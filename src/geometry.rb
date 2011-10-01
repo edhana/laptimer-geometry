@@ -17,6 +17,19 @@ class Line
 		@gradient
 	end
 
+	# m(x2-x1) - y2 + y1 = 0
+	def include?(point) 
+		result = @gradient * (point[:x] - @pointA[:x]) - point[:y] + @pointA[:y]
+		if(result == 0)
+			true
+		else
+			false
+		end
+	end
+
+	def intercept?(line)
+	end
+
 	private
 	def calculate_gradient
 		@gradient = (@pointB[:y] - @pointA[:y]) / (@pointB[:x] - @pointA[:x]).to_f
