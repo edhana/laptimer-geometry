@@ -29,17 +29,19 @@ class Line
 		end
 	end
 
-	def intercept?(line)									
-		x = calculate_x_from_two_lines(self, line)
-		y = (@gradient*x.to_f) + @linear
+	def intercept?(line)	
+		if @gradient != line.gradient								
+			x = calculate_x_from_two_lines(self, line)
+			y = (@gradient*x.to_f) + @linear
+			
+			new_point = { :x => x, :y => y}
 
-		new_point = { :x => x, :y => y}
-
-		if include?(new_point)
-			true
-		else
-			false
+			if include?(new_point)
+				return true
+			end
 		end
+
+		return false
 	end
 
 	def linear_touch

@@ -34,6 +34,14 @@ describe Line do
 		sl.include?(pointC).should be_true
 	end
 
+	it "should intercept with the other line (3,0) and (1,2)" do
+		sl = Line.new(@pointA, @pointB)
+		sl2 = Line.new(@pointC, @pointD)
+		sl.intercept?(sl2).should be_true
+		sl3 = Line.new(@pointE, @pointF)
+		sl.intercept?(sl3).should be_true
+	end
+
 	it "two concurrent lines should intercept" do
 		pA = {:x => 1, :y => 1}
 		pB = {:x => 3, :y => 3}
@@ -43,4 +51,16 @@ describe Line do
 		sl2 = Line.new(pC, pD)
 		sl.intercept?(sl2).should be_true
 	end
+
+	it "should not intercept with a parallel line" do 
+		pA = {:x => 1, :y => 1}
+		pB = {:x => 3, :y => 3}
+		pC = {:x => 2, :y => 1}
+		pD = {:x => 3, :y => 2}
+		sl = Line.new(pA, pB)
+		sl2 = Line.new(pC, pD)
+		sl.intercept?(sl2).should be_false
+	end
+
+
 end
