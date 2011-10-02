@@ -10,6 +10,7 @@ module Geometry
 end
 
 class Line
+	include Math
 	def initialize(pointA, pointB)
 		@a, @b, @c = nil, nil, nil
 		@gradient = nil
@@ -49,11 +50,11 @@ class Line
 			x = calculate_x_from_two_lines(self, line)
 			y = (@gradient*x.to_f) + @linear
 			
-			new_point = { :x => x, :y => y}
-
-			if include?(new_point)
+			new_point = { :x => sprintf('%.6f',x).to_f, :y => sprintf('%.6f',y).to_f}
+			puts "new point: #{new_point[:y]} #{new_point[:x]}"
+			#if include?(new_point)
 				return new_point
-			end
+			#end
 		end
 
 		return nil
@@ -70,9 +71,20 @@ class Line
 			interception_point = intercept_at(line)
 			distance_segment = Geometry.distance(@pointA, @pointB)
 			distance_A_line_segment = Geometry.distance(@pointA, interception_point)
-			distance_B_line_segment = Geometry.distance(@pointA, interception_point)
+			distance_B_line_segment = Geometry.distance(@pointB, interception_point)
+			# distance_segment = calculate_distance(@pointA, @pointB)
+			# distance_A_line_segment = calculate_distance(@pointA, interception_point)
+			# distance_B_line_segment = calculate_distance(@pointB, interception_point)
 
-			if distance_A_line_segment < distance_segment and distance_B_line_segment < distance_segment
+			puts "Distancia de A para B: #{distance_segment}"
+			puts "Distance A para ponto interseccao: #{distance_A_line_segment}"
+			puts "Distance B para ponto interseccao: #{distance_B_line_segment}"
+
+			if distance_A_line_segment > distance_segment 
+				return false
+			elsif distance_B_line_segment > distance_segment
+				return false
+			else
 				return true
 			end
 		end
@@ -95,5 +107,9 @@ class Line
 
 	def calculate_x_from_two_lines(line1, line2)
 		(line2.linear_touch - line1.linear_touch) / (line1.gradient - line2.gradient)
+	end
+
+	def calculate_distance(point1, point2)
+		(sin(point2[:y])*sin(point1[:y]))+((cos(point2[:y])*cos(point1[:y]))*cos(point2[:x] - point1[:x]))
 	end
 end

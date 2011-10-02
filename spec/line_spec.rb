@@ -82,4 +82,47 @@ describe Line do
 		sl2 = Line.new(pC, pD)
 		sl.intercept_line_segment?(sl2).should be_false
 	end
+
+	it "should intercept event in the negative Y quadrant" do 
+		flag_line = Line.new({:x => 1, :y => -1, }, {:x => 3, :y => -4})
+		segment1 = Line.new({:x => 1, :y => -3}, {:x => 3, :y => -1})
+
+		flag_line.intercept_line_segment?(segment1).should be_true
+	end
+
+
+	it "should intercept event in the negative X quadrant" do 
+		flag_line = Line.new({:x => -1, :y => 1, }, {:x => -3, :y => 4})
+		segment1 = Line.new({:x => -3, :y => 1}, {:x => -1, :y => 3})
+
+		flag_line.intercept_line_segment?(segment1).should be_true
+	end
+
+	it "should intercept event in the all negative quadrant" do 
+		flag_line = Line.new({:x => -1, :y => -1, }, {:x => -3, :y => -3})
+		segment1 = Line.new({:x => -1, :y => -3}, {:x => -2, :y => -2})
+
+		flag_line.intercept_line_segment?(segment1).should be_true
+	end
+
+	it "should intercept when segments are in different quadrants" do 
+		flag_line = Line.new({:x => -1, :y => 1, }, {:x => -3, :y => 4})
+		segment1 = Line.new({:x => 1, :y => 3}, {:x => 3, :y => 1})
+
+		flag_line.intercept_line_segment?(segment1).should be_false
+	end
+
+	it "should find the crossing segment with some real coordinates" do 
+		flag_line = Line.new({:x => -47.900333, :y => -15.772656, }, {:x => -47.900148, :y => -15.773056})
+		segment1 = Line.new({:x => -47.900648, :y => -15.772954}, {:x =>-47.899923, :y => -15.772683})
+
+		flag_line.intercept_line_segment?(segment1).should be_true
+	end
+
+	it "should not accept the crossing form real segments with they do not touch" do
+		flag_line = Line.new({:x => -47.900333, :y => -15.772656, }, {:x => -47.900148, :y => -15.773056}) 
+		segment1 = Line.new({:x => -47.900648, :y => -15.772954}, {:x =>-47.900365, :y => -15.772869})
+
+		flag_line.intercept_line_segment?(segment1).should be_false
+	end
 end
