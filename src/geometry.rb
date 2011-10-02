@@ -31,13 +31,11 @@ class Line
 
 	def intercept?(line)									
 		x = calculate_x_from_two_lines(self, line)
-		y = (@gradient*@pointA[:x].to_f) + @linear
+		y = (@gradient*x.to_f) + @linear
 
 		new_point = { :x => x, :y => y}
 
-		puts "========> New Point x: #{x} - y: #{y}"
 		if include?(new_point)
-			puts "========> Fodeo!"
 			true
 		else
 			false
@@ -62,6 +60,6 @@ class Line
 	end
 
 	def calculate_x_from_two_lines(line1, line2)
-		(line2.linear_touch - line1.linear_touch)/(line1.gradient - line2.gradient)
+		(line2.linear_touch - line1.linear_touch) / (line1.gradient - line2.gradient)
 	end
 end
