@@ -42,7 +42,7 @@ describe Line do
 		sl.intercept?(sl3).should be_true
 	end
 
-	it "two concurrent lines should intercept" do
+	it "two concurrent lines should intercept at (2,2)" do
 		pA = {:x => 1, :y => 1}
 		pB = {:x => 3, :y => 3}
 		pC = {:x => 1, :y => 3}
@@ -50,6 +50,7 @@ describe Line do
 		sl = Line.new(pA, pB)
 		sl2 = Line.new(pC, pD)
 		sl.intercept?(sl2).should be_true
+		sl.intercept_at(sl2).should be_eql({:x => 2.0, :y => 2.0})
 	end
 
 	it "should not intercept with a parallel line" do 
@@ -62,5 +63,23 @@ describe Line do
 		sl.intercept?(sl2).should be_false
 	end
 
+	it "should intercept between the 2 original points of the first line" do
+		pA = {:x => 1, :y => 1}
+		pB = {:x => 3, :y => 3}
+		pC = {:x => 1, :y => 3}
+		pD = {:x => 3, :y => 1}
+		sl = Line.new(pA, pB)
+		sl2 = Line.new(pC, pD)
+		sl.intercept_line_segment?(sl2).should be_true
+	end
 
+	it "should not find an interception between the two segments" do
+		pA = {:x => 1, :y => 1}
+		pB = {:x => 3, :y => 3}
+		pC = {:x => 4, :y => 3}
+		pD = {:x => 6, :y => 1}
+		sl = Line.new(pA, pB)
+		sl2 = Line.new(pC, pD)
+		sl.intercept_line_segment?(sl2).should be_false
+	end
 end

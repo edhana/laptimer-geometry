@@ -1,3 +1,14 @@
+module Geometry
+  include Math
+  extend Math
+  
+  def distance(point1, point2)
+    hypot point1[:x] - point2[:x], point1[:y] - point2[:y]
+  end
+
+  module_function :distance
+end
+
 class Line
 	def initialize(pointA, pointB)
 		@a, @b, @c = nil, nil, nil
@@ -30,6 +41,10 @@ class Line
 	end
 
 	def intercept?(line)	
+		(intercept_at(line).nil? == true) ? false : true
+	end
+
+	def intercept_at(line)
 		if @gradient != line.gradient								
 			x = calculate_x_from_two_lines(self, line)
 			y = (@gradient*x.to_f) + @linear
@@ -37,15 +52,32 @@ class Line
 			new_point = { :x => x, :y => y}
 
 			if include?(new_point)
+				return new_point
+			end
+		end
+
+		return nil
+	end
+
+	def linear_touch
+		@linear
+	end
+
+	def intercept_line_segment?(line)
+		
+		# verify the distance
+		if intercept?(line)
+			interception_point = intercept_at(line)
+			distance_segment = Geometry.distance(@pointA, @pointB)
+			distance_A_line_segment = Geometry.distance(@pointA, interception_point)
+			distance_B_line_segment = Geometry.distance(@pointA, interception_point)
+
+			if distance_A_line_segment < distance_segment and distance_B_line_segment < distance_segment
 				return true
 			end
 		end
 
 		return false
-	end
-
-	def linear_touch
-		@linear
 	end
 
 	private
