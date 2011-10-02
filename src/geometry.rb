@@ -3,10 +3,29 @@ module Geometry
   extend Math
   
   def distance(point1, point2)
-    hypot point1[:x] - point2[:x], point1[:y] - point2[:y]
+  	x1 = (point1[:x] > 0) ? point1[:x] : (point1[:x]*-1 )
+  	x2 = (point2[:x] > 0) ? point2[:x] : (point2[:x]*-1 )
+  	y1 = (point1[:y] > 0) ? point1[:y] : (point1[:y]*-1 )
+  	y2 = (point2[:y] > 0) ? point2[:y] : (point2[:y]*-1 )
+    hypot x1 - x2, y1 - y2
   end
 
+	def calculate_distance(point1, point2)
+		x1 = point1[:x] * Math::PI / 180
+		x2 = point2[:x] * Math::PI / 180
+		y1 = point1[:y] * Math::PI / 180
+		y2 = point2[:y] * Math::PI / 180
+
+		s = sin(y2)*sin(y1)+(cos(y2)*cos(y1)*cos(x2 - x1))
+		rad_distance = acos(s)
+		degree_distance = rad_distance/(Math::PI/180)
+		earth_radius = 6378
+		distance_km = earth_radius*degree_distance		
+		distance_km
+	end
+
   module_function :distance
+  module_function :calculate_distance
 end
 
 class Line
@@ -20,6 +39,14 @@ class Line
 		calculate_gradient
 		calculate_linear
 	end	
+
+	def pointA
+		@pointA
+	end
+
+	def pointB
+		@pointB
+	end
 
 	def gradient(ac = nil)
 		if ac.nil?
@@ -51,10 +78,7 @@ class Line
 			y = (@gradient*x.to_f) + @linear
 			
 			new_point = { :x => sprintf('%.6f',x).to_f, :y => sprintf('%.6f',y).to_f}
-			puts "new point: #{new_point[:y]} #{new_point[:x]}"
-			#if include?(new_point)
-				return new_point
-			#end
+			return new_point
 		end
 
 		return nil
@@ -69,16 +93,10 @@ class Line
 		# verify the distance
 		if intercept?(line)
 			interception_point = intercept_at(line)
-			distance_segment = Geometry.distance(@pointA, @pointB)
-			distance_A_line_segment = Geometry.distance(@pointA, interception_point)
-			distance_B_line_segment = Geometry.distance(@pointB, interception_point)
-			# distance_segment = calculate_distance(@pointA, @pointB)
-			# distance_A_line_segment = calculate_distance(@pointA, interception_point)
-			# distance_B_line_segment = calculate_distance(@pointB, interception_point)
 
-			puts "Distancia de A para B: #{distance_segment}"
-			puts "Distance A para ponto interseccao: #{distance_A_line_segment}"
-			puts "Distance B para ponto interseccao: #{distance_B_line_segment}"
+			distance_segment = Geometry.calculate_distance(line.pointA, line.pointB)
+			distance_A_line_segment = Geometry.calculate_distance(line.pointA, interception_point)
+			distance_B_line_segment = Geometry.calculate_distance(line.pointB, interception_point)
 
 			if distance_A_line_segment > distance_segment 
 				return false
@@ -107,9 +125,5 @@ class Line
 
 	def calculate_x_from_two_lines(line1, line2)
 		(line2.linear_touch - line1.linear_touch) / (line1.gradient - line2.gradient)
-	end
-
-	def calculate_distance(point1, point2)
-		(sin(point2[:y])*sin(point1[:y]))+((cos(point2[:y])*cos(point1[:y]))*cos(point2[:x] - point1[:x]))
 	end
 end

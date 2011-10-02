@@ -112,6 +112,14 @@ describe Line do
 		flag_line.intercept_line_segment?(segment1).should be_false
 	end
 
+	it "should calculate the distance using the Earth radius" do 
+		point1 = {:x => -47.900648, :y => -15.772954} 
+		point2 = {:x => -47.900365, :y => -15.772869}
+		point3 = {:x => -47.90025, :y => -15.772835}
+		Geometry.calculate_distance(point1, point2).should be_true
+		Geometry.calculate_distance(point1, point3).should be_true
+	end
+
 	it "should find the crossing segment with some real coordinates" do 
 		flag_line = Line.new({:x => -47.900333, :y => -15.772656, }, {:x => -47.900148, :y => -15.773056})
 		segment1 = Line.new({:x => -47.900648, :y => -15.772954}, {:x =>-47.899923, :y => -15.772683})
@@ -125,4 +133,5 @@ describe Line do
 
 		flag_line.intercept_line_segment?(segment1).should be_false
 	end
+
 end
