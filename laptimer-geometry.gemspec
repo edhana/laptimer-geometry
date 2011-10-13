@@ -13,6 +13,6 @@ Gem::Specification.new do |s|
   s.test_files = FileList["{spec}/**/*spec.rb"].to_a
   s.has_rdoc = false
   s.description = <<-EOF
-    laptimer-geometry is a gem created to help the coordinates calculations used in a laptimer software.
+    laptimer-geometry is a gem created to help the coordinate calculations used in laptimer software.
   EOF
 end

@@ -134,4 +134,11 @@ describe Line do
 		flag_line.intercept_line_segment?(segment1).should be_false
 	end
 
+	it "should find the exact distance between 2 points on the earth" do
+		point1 = {:x => -47.900331, :y => -15.77284} 
+		point2 = {:x => -47.897064, :y => -15.77171}
+		distance = Geometry.calculate_spherical_distance(point1, point2)
+		distance.should be_within(0.001).of(0.372) # in Km
+	end
+
 end
