@@ -6,20 +6,6 @@ module Geometry
     hypot point1[:x] - point2[:x], point1[:y] - point2[:y]
   end
 
-  def calculate_distance(point1, point2)
-    x1 = point1[:x] * Math::PI / 180
-    x2 = point2[:x] * Math::PI / 180
-    y1 = point1[:y] * Math::PI / 180
-    y2 = point2[:y] * Math::PI / 180
-
-    s = sin(y2)*sin(y1)+(cos(y2)*cos(y1)*cos(x2 - x1))
-    rad_distance = acos(s)
-    degree_distance = rad_distance/(Math::PI/180)
-    earth_radius = 6378
-    distance_km = earth_radius*degree_distance    
-    distance_km
-  end
-
   def calculate_spherical_distance(point1, point2)
     x1 = deg_2_rad(point1[:x])
     x2 = deg_2_rad(point2[:x])
@@ -40,7 +26,6 @@ module Geometry
   end
 
   module_function :euclidean_distance
-  module_function :calculate_distance
   module_function :deg_2_rad
   module_function :calculate_spherical_distance
 end
@@ -111,9 +96,9 @@ class Line
     if intercept?(line)
       interception_point = intercept_at(line)
 
-      distance_segment = Geometry.calculate_distance(line.pointA, line.pointB)
-      distance_A_line_segment = Geometry.calculate_distance(line.pointA, interception_point)
-      distance_B_line_segment = Geometry.calculate_distance(line.pointB, interception_point)
+      distance_segment = Geometry.calculate_spherical_distance(line.pointA, line.pointB)
+      distance_A_line_segment = Geometry.calculate_spherical_distance(line.pointA, interception_point)
+      distance_B_line_segment = Geometry.calculate_spherical_distance(line.pointB, interception_point)
 
       if distance_A_line_segment > distance_segment 
         return false

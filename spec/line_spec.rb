@@ -116,8 +116,8 @@ describe Line do
 		point1 = {:x => -47.900648, :y => -15.772954} 
 		point2 = {:x => -47.900365, :y => -15.772869}
 		point3 = {:x => -47.90025, :y => -15.772835}
-		Geometry.calculate_distance(point1, point2).should be_true
-		Geometry.calculate_distance(point1, point3).should be_true
+		Geometry.calculate_spherical_distance(point1, point2).should be_true
+		Geometry.calculate_spherical_distance(point1, point3).should be_true
 	end
 
 	it "should find the crossing segment with some real coordinates - Aut. Nelson Piquet" do 
